@@ -69,3 +69,21 @@ final class MenuBarRendererTests: XCTestCase {
         XCTAssertGreaterThan(widths[2], widths[0], "values+graphs is wider than values only")
     }
 }
+
+@MainActor
+final class LaunchSafetyTests: XCTestCase {
+    /// Regression: a defaults-changed notification delivered before launch finished used to render the menu
+    /// bar image synchronously, re-entering AppKit font/appearance initialisation and aborting in libdispatch.
+    func testDefaultsNotificationBeforeStartDoesNoRendering() async throws {
+        let model = MonitorModel.shared
+        XCTAssertFalse(model.started)
+        UserDefaults.standard.set(true, forKey: Pref.showMenuBar)
+        defer { UserDefaults.standard.removeObject(forKey: Pref.showMenuBar) }
+        NotificationCenter.default.post(name: UserDefaults.didChangeNotification, object: UserDefaults.standard)
+        model.reevaluate()
+        model.refreshMenuBarImage()
+        try await Task.sleep(for: .milliseconds(100))
+        XCTAssertEqual(model.menuBarImage.size.width, 0, "nothing may render before start()")
+        XCTAssertFalse(model.started)
+    }
+}

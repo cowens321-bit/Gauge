@@ -5,6 +5,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         !UserDefaults.standard.bool(forKey: Pref.showMenuBar)
     }
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        // Hop to the next run-loop turn so nothing runs inside launch-time AppKit initialisation.
+        Task { @MainActor in MonitorModel.shared.start() }
+    }
     func applicationWillTerminate(_ notification: Notification) {
         MainActor.assumeIsolated { MonitorModel.shared.shutdown() }
     }
@@ -14,13 +18,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 struct GaugeApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var delegate
     @AppStorage(Pref.showMenuBar) private var showMenuBar = true
-    private let model = MonitorModel.shared
+    private var model: MonitorModel { MonitorModel.shared }   // not touched before registerDefaults() has run
     @StateObject private var updater = UpdateController()
 
     init() {
         Pref.registerDefaults()
         if CommandLine.arguments.contains("--dump") { HeadlessDump.run() }
-        MonitorModel.shared.reevaluate()   // starts lightweight menu bar sampling right away
     }
 
     var body: some Scene {

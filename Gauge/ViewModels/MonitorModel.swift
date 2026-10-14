@@ -37,10 +37,22 @@ final class MonitorModel {
     let coreCount = ProcessInfo.processInfo.activeProcessorCount
     let totalMemory = ProcessInfo.processInfo.physicalMemory
 
+    /// False until `start()` runs after the app has finished launching. Nothing that touches AppKit text,
+    /// fonts or appearance may run before then: those are initialised lazily and re-enter
+    /// `UserDefaults.registerDefaults`, which posts the very notification observed below.
+    private(set) var started = false
+
     private init() {
         observer = NotificationCenter.default.addObserver(forName: UserDefaults.didChangeNotification, object: nil, queue: .main) { [weak self] _ in
-            MainActor.assumeIsolated { self?.reevaluate() }
+            // Never do work inside the notification itself (it can fire from inside AppKit initialisation).
+            Task { @MainActor [weak self] in self?.reevaluate() }
         }
+    }
+
+    func start() {
+        guard !started else { return }
+        started = true
+        reevaluate()
     }
 
     func group(id: String) -> GroupSnapshot? { snapshot?.groups.first { $0.id == id } }
@@ -49,6 +61,7 @@ final class MonitorModel {
 
     // MARK: Scheduling
     func reevaluate() {
+        guard started else { return }
         let d = UserDefaults.standard
         let interval = d.double(forKey: Pref.refreshInterval)
         let menuBar = d.bool(forKey: Pref.showMenuBar)
@@ -151,7 +164,7 @@ final class MonitorModel {
     }
 
     func refreshMenuBarImage() {
-        guard UserDefaults.standard.bool(forKey: Pref.showMenuBar) else { return }
+        guard started, UserDefaults.standard.bool(forKey: Pref.showMenuBar) else { return }
         menuBarImage = MenuBarRenderer.render(snapshot: snapshot?.system, history: systemHistory)
     }
 }

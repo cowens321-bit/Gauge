@@ -3,13 +3,13 @@
   <channel>
     <title>Gauge</title>
     <item>
-      <title>Version 1.2.0</title>
-      <pubDate>Wed, 14 Oct 2026 15:09:09 +0000</pubDate>
-      <sparkle:version>4</sparkle:version>
-      <sparkle:shortVersionString>1.2.0</sparkle:shortVersionString>
+      <title>Version 1.3.0</title>
+      <pubDate>Wed, 14 Oct 2026 15:17:38 +0000</pubDate>
+      <sparkle:version>5</sparkle:version>
+      <sparkle:shortVersionString>1.3.0</sparkle:shortVersionString>
       <sparkle:minimumSystemVersion>26.0</sparkle:minimumSystemVersion>
-      <description><![CDATA[Much lower CPU use: about 3% with the window open and 1% from the menu bar alone at a 2-second refresh (was about 50%). Default refresh is back to every 2 seconds. Live values now update without animation; the sampler caches app lookups.]]></description>
-      <enclosure url="https://github.com/cowens321-bit/Gauge/releases/download/v1.2.0/Gauge-1.2.0.dmg" type="application/octet-stream" sparkle:edSignature="fgTW3VniN9zN5sSxFdrsA8V4W8g9cHsoP/xoEfehwDm/rAQSkmLh7QsLIVcuSlrurXOwY19TyVSCatuiVZ7PBw==" length="3022762" />
+      <description><![CDATA[Launch at login: on by default (applied once when Gauge runs from Applications). Turn it off from the menu bar popover or Settings > General and it stays off.]]></description>
+      <enclosure url="https://github.com/cowens321-bit/Gauge/releases/download/v1.3.0/Gauge-1.3.0.dmg" type="application/octet-stream" sparkle:edSignature="ZoH5+9r7wTMgyK4LWFXzrz3PXSPMLXDM6WzGICFhGdBmCWOVSvJGA7c08nRUQicnY9KOQzN9u+joTWvBe8LZCw==" length="3021647" />
     </item>
   </channel>
 </rss>

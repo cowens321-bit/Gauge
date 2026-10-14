@@ -3,13 +3,13 @@
   <channel>
     <title>Gauge</title>
     <item>
-      <title>Version 1.0.0</title>
-      <pubDate>Fri, 09 Oct 2026 23:47:35 +0000</pubDate>
-      <sparkle:version>1</sparkle:version>
-      <sparkle:shortVersionString>1.0.0</sparkle:shortVersionString>
+      <title>Version 1.1.0</title>
+      <pubDate>Wed, 14 Oct 2026 14:44:32 +0000</pubDate>
+      <sparkle:version>3</sparkle:version>
+      <sparkle:shortVersionString>1.1.0</sparkle:shortVersionString>
       <sparkle:minimumSystemVersion>26.0</sparkle:minimumSystemVersion>
-      <description><![CDATA[First release. Native macOS Activity Monitor alternative: apps grouped by owner, live menu bar usage, Liquid Glass UI, automatic updates.]]></description>
-      <enclosure url="https://github.com/cowens321-bit/Gauge/releases/download/v1.0.0/Gauge-1.0.0.dmg" type="application/octet-stream" sparkle:edSignature="cNz6wpy+TwYyxBxLfX1nVnhXhX4TBRCPUzJbdJy0Q+MfGDboug2WSftftRj2pW3Ex60qvFfpjRYWViz4vwrYDg==" length="2997938" />
+      <description><![CDATA[Menu bar utility defaults: hidden from the Dock, menu bar item on, Values display, scans every 10 s. Liquid Glass now applied the standard way and extended behind the sidebar/toolbar. Includes the launch crash fix from 1.0.1.]]></description>
+      <enclosure url="https://github.com/cowens321-bit/Gauge/releases/download/v1.1.0/Gauge-1.1.0.dmg" type="application/octet-stream" sparkle:edSignature="sIRcnv7w/TJrv2Gbx3CKU4yl8/ZgNxdtQV5LIcmG6q6npjXLw55vEbsIjFPGOTFNHlylKF5Z9S9OjUHmkmSuAg==" length="3001676" />
     </item>
   </channel>
 </rss>

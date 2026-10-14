@@ -4,7 +4,7 @@ final class DefaultsTests: XCTestCase {
     /// The product defaults: lightweight menu bar utility.
     func testShippedDefaults() {
         let keys = [Pref.refreshInterval, Pref.showMenuBar, Pref.menuBarStyle, Pref.showInDock, Pref.menuBarCPU,
-                    Pref.menuBarMemory, Pref.menuBarNetwork, Pref.menuBarGPU, Pref.menuBarDisk, Pref.menuBarStorage, Pref.visualEffects]
+                    Pref.menuBarMemory, Pref.menuBarNetwork, Pref.menuBarGPU, Pref.menuBarDisk, Pref.menuBarStorage, Pref.visualEffects, Pref.launchAtLogin]
         let d = UserDefaults.standard
         let saved = keys.map { ($0, d.object(forKey: $0)) }
         keys.forEach { d.removeObject(forKey: $0) }
@@ -17,5 +17,6 @@ final class DefaultsTests: XCTestCase {
         XCTAssertTrue(d.bool(forKey: Pref.menuBarCPU)); XCTAssertTrue(d.bool(forKey: Pref.menuBarMemory))
         XCTAssertFalse(d.bool(forKey: Pref.menuBarNetwork)); XCTAssertFalse(d.bool(forKey: Pref.menuBarGPU))
         XCTAssertEqual(d.string(forKey: Pref.visualEffects), VisualEffects.glass.rawValue)
+        XCTAssertTrue(d.bool(forKey: Pref.launchAtLogin), "launch at login on by default")
     }
 }

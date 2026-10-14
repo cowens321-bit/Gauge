@@ -24,7 +24,7 @@ struct SettingsView: View {
     @AppStorage(Pref.historyMinutes) private var history = 10
     @AppStorage(Pref.cpuNormalization) private var norm = CPUNormalization.perCore
     @AppStorage(Pref.perAppNetwork) private var perAppNetwork = false
-    @State private var loginEnabled = SMAppService.mainApp.status == .enabled
+    @State private var loginEnabled = LoginItem.isEnabled
     @State private var loginError: String?
 
     var body: some View {
@@ -38,7 +38,7 @@ struct SettingsView: View {
                 }
                 Text("History is kept in memory only and is never written to disk.").font(.caption).foregroundStyle(.secondary)
                 Section("Startup") {
-                    Toggle("Launch at login", isOn: Binding(get: { loginEnabled }, set: setLogin))
+                    Toggle("Launch Gauge at login", isOn: Binding(get: { loginEnabled }, set: setLogin))
                     if let loginError { Text(loginError).font(.caption).foregroundStyle(.red) }
                     Toggle("Show Gauge in the Dock", isOn: $showInDock)
                     Text("Off by default: Gauge lives in the menu bar. Click its icon, then “Open Gauge” for the full window.").font(.caption).foregroundStyle(.secondary)
@@ -96,6 +96,7 @@ struct SettingsView: View {
         .formStyle(.grouped)
         .frame(width: 540, height: 520)
         .injectPreferences()
+        .onAppear { loginEnabled = LoginItem.isEnabled }
         .onChange(of: mbCPU) { model.refreshMenuBarImage() }.onChange(of: mbMem) { model.refreshMenuBarImage() }
         .onChange(of: mbGPU) { model.refreshMenuBarImage() }.onChange(of: mbNet) { model.refreshMenuBarImage() }
         .onChange(of: mbDisk) { model.refreshMenuBarImage() }.onChange(of: mbStorage) { model.refreshMenuBarImage() }
@@ -104,11 +105,8 @@ struct SettingsView: View {
     }
 
     private func setLogin(_ on: Bool) {
-        do {
-            if on { try SMAppService.mainApp.register() } else { try SMAppService.mainApp.unregister() }
-            loginError = nil
-        } catch { loginError = error.localizedDescription }
-        loginEnabled = SMAppService.mainApp.status == .enabled
-        if on && !loginEnabled && loginError == nil { loginError = "Approve Gauge in System Settings ▸ General ▸ Login Items." }
+        do { try LoginItem.set(on); loginError = nil } catch { loginError = error.localizedDescription }
+        loginEnabled = LoginItem.isEnabled
+        if on && LoginItem.needsApproval { loginError = "Approve Gauge in System Settings ▸ General ▸ Login Items." }
     }
 }

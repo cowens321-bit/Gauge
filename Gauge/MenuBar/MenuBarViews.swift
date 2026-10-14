@@ -32,6 +32,7 @@ struct MenuBarPopover: View {
     @AppStorage(Pref.menuBarDisk) private var mbDisk = false
     @AppStorage(Pref.menuBarStorage) private var mbStorage = false
     @State private var mode = 0
+    @State private var launchAtLogin = LoginItem.isEnabled
     @State private var showItems = false
 
     var body: some View {
@@ -90,6 +91,11 @@ struct MenuBarPopover: View {
             }
             .glassCard(radius: 22, padding: 12)
 
+            Toggle(isOn: Binding(get: { launchAtLogin }, set: { on in
+                try? LoginItem.set(on); launchAtLogin = LoginItem.isEnabled
+            })) { Label("Launch at login", systemImage: "power.circle").font(.callout) }
+                .toggleStyle(.switch).controlSize(.small)
+                .padding(.horizontal, 4)
             HStack {
                 Button("Open Gauge", systemImage: "macwindow") { openWindow(id: "main"); NSApp.activate(ignoringOtherApps: true) }
                     .buttonStyle(.glassProminent)
@@ -100,7 +106,7 @@ struct MenuBarPopover: View {
         }
         .padding(12)
         .frame(width: 360)
-        .onAppear { model.popoverVisible = true }
+        .onAppear { model.popoverVisible = true; launchAtLogin = LoginItem.isEnabled }
         .onDisappear { model.popoverVisible = false }
         .onChange(of: mbCPU) { model.refreshMenuBarImage() }
         .onChange(of: mbMem) { model.refreshMenuBarImage() }

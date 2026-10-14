@@ -3,7 +3,8 @@ import AppKit
 
 enum Pref {
     static let refreshInterval = "refreshInterval"          // seconds; 0 == paused
-    static let launchAtLogin = "launchAtLogin"
+    static let launchAtLogin = "launchAtLogin"            // desired default; the system holds the real state
+    static let loginItemConfigured = "loginItemConfigured"
     static let showMenuBar = "showMenuBar"
     static let menuBarCPU = "menuBarCPU"
     static let menuBarMemory = "menuBarMemory"
@@ -25,7 +26,7 @@ enum Pref {
 
     static func registerDefaults() {
         UserDefaults.standard.register(defaults: [
-            refreshInterval: 2.0, launchAtLogin: false, showMenuBar: true,
+            refreshInterval: 2.0, launchAtLogin: true, showMenuBar: true,
             menuBarCPU: true, menuBarMemory: true, menuBarNetwork: false, menuBarGraph: true,
             menuBarGPU: false, menuBarDisk: false, menuBarStorage: false, menuBarStyle: MenuBarStyle.value.rawValue, showInDock: false,
             appearance: AppearanceMode.system.rawValue, defaultSort: SortKey.cpu.rawValue,

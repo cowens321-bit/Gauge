@@ -18,7 +18,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
     func applicationDidFinishLaunching(_ notification: Notification) {
         // Hop to the next run-loop turn so nothing runs inside launch-time AppKit initialisation.
-        Task { @MainActor in MonitorModel.shared.start() }
+        Task { @MainActor in
+            MonitorModel.shared.start()
+            LoginItem.applyDefaultIfNeeded()   // on by default, once; the user can turn it off in Settings or the popover
+        }
         defaultsObserver = NotificationCenter.default.addObserver(forName: UserDefaults.didChangeNotification, object: nil, queue: .main) { _ in
             Task { @MainActor in AppDelegate.applyActivationPolicy() }
         }

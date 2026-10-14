@@ -21,6 +21,7 @@
 		34BD7B8912B2756186ACE5F2 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D275F4CAA370F36EBC08D9 /* RootView.swift */; };
 		44DF5B7969C7FD7FD4B70C55 /* MenuBarViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69181CF65CDF772383764824 /* MenuBarViews.swift */; };
 		4D7E45929751C8F243FAC77D /* AppList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505E7F98979A33FAFC184EBF /* AppList.swift */; };
+		522F73B1CF893C804A689FEC /* LoginItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8734C741086CC68AE24A3EA2 /* LoginItem.swift */; };
 		52CE7168C60D6CDB60B072BF /* MetricCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52432F88D3026A9236A1141B /* MetricCells.swift */; };
 		5472304DD3D283693C344FBB /* GaugeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495DA08633366CB50B3E0EE7 /* GaugeApp.swift */; };
 		555F81CAA8952F53CC08B289 /* ProcessModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA76442376E3B1B1E6812E5F /* ProcessModels.swift */; };
@@ -29,6 +30,7 @@
 		578BE938901ACCAD94118035 /* RateTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064A0FDD85728044FD0F429 /* RateTracker.swift */; };
 		5C78C8C84493AAF59B99A5B5 /* MetricCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52432F88D3026A9236A1141B /* MetricCells.swift */; };
 		5F17934FE763A0366EFC2597 /* MenuBarRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDDD44FD3558FEB027202149 /* MenuBarRenderer.swift */; };
+		5F719AED00DDE6471B002D2D /* LoginItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8734C741086CC68AE24A3EA2 /* LoginItem.swift */; };
 		619D01F21FB703867DC40FB6 /* TimeChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769858D82AD638E4DA8F24FA /* TimeChart.swift */; };
 		626ED1D8BC6910C3FF1E13F3 /* GroupAggregator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B068FF2F66CFFF2224957A /* GroupAggregator.swift */; };
 		62D0A3B407FA98BF20DDCFA8 /* MonitorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05BC0EC4E1A0223319C1E9E4 /* MonitorModel.swift */; };
@@ -50,6 +52,7 @@
 		8B594BD22A936CA76EDD2E8D /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DB07B3789E27D0B0780D61 /* Notifications.swift */; };
 		8C66D4E438C2635EAC69B60F /* MenuBarRendererTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0277356F7148CFA394933D16 /* MenuBarRendererTests.swift */; };
 		8EA4055D173BADE1F6A54A64 /* ProcessController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6544028F71A10B370FD5C076 /* ProcessController.swift */; };
+		906F136882922715F25D51F0 /* LoginItemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA33426D728208EE5208B4A /* LoginItemTests.swift */; };
 		9344E1205BE492E4BD28059F /* Formatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82941CDA58ED4A9C93DAD2B0 /* Formatters.swift */; };
 		9366E2120FAC00D4EAFF05E0 /* ProcessController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6544028F71A10B370FD5C076 /* ProcessController.swift */; };
 		9677BFCC226C4FA647586828 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DB07B3789E27D0B0780D61 /* Notifications.swift */; };
@@ -119,11 +122,13 @@
 		805C70FC018215988174B249 /* GaugeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GaugeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		82941CDA58ED4A9C93DAD2B0 /* Formatters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatters.swift; sourceTree = "<group>"; };
 		854F49652316DF10E454030A /* ProcessSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessSource.swift; sourceTree = "<group>"; };
+		8734C741086CC68AE24A3EA2 /* LoginItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginItem.swift; sourceTree = "<group>"; };
 		8B057E55DBDBC192AE71B700 /* RateTrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RateTrackerTests.swift; sourceTree = "<group>"; };
 		90F4058541586621F6372544 /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
 		934F843328D8C05AC370FA37 /* DefaultsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultsTests.swift; sourceTree = "<group>"; };
 		95A09F8CD02321699F83F025 /* GroupModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupModels.swift; sourceTree = "<group>"; };
 		96D275F4CAA370F36EBC08D9 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		ACA33426D728208EE5208B4A /* LoginItemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginItemTests.swift; sourceTree = "<group>"; };
 		B064A0FDD85728044FD0F429 /* RateTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RateTracker.swift; sourceTree = "<group>"; };
 		B251EFD2E7F007240FCF0295 /* ProtectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtectionTests.swift; sourceTree = "<group>"; };
 		B5E400E0F1705BD9861EC82A /* Updater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Updater.swift; sourceTree = "<group>"; };
@@ -160,6 +165,7 @@
 				C6FDC9AEC913AC77A698BAE2 /* AttributionTests.swift */,
 				934F843328D8C05AC370FA37 /* DefaultsTests.swift */,
 				BFE82FF40EAD9AB8757E5B2D /* LiveSystemTests.swift */,
+				ACA33426D728208EE5208B4A /* LoginItemTests.swift */,
 				0277356F7148CFA394933D16 /* MenuBarRendererTests.swift */,
 				B251EFD2E7F007240FCF0295 /* ProtectionTests.swift */,
 				8B057E55DBDBC192AE71B700 /* RateTrackerTests.swift */,
@@ -273,6 +279,7 @@
 		8FD8F830C3D61CD59E988830 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				8734C741086CC68AE24A3EA2 /* LoginItem.swift */,
 				D15740EA3B24DCBB2E90DD99 /* Preferences.swift */,
 				F1B736433B1B2C416051B55C /* SettingsView.swift */,
 			);
@@ -444,6 +451,7 @@
 				5472304DD3D283693C344FBB /* GaugeApp.swift in Sources */,
 				9F7E7FBFC300A02AADE89A1D /* GroupAggregator.swift in Sources */,
 				7ACE4DF11012905F54653ECE /* GroupModels.swift in Sources */,
+				522F73B1CF893C804A689FEC /* LoginItem.swift in Sources */,
 				8222226CA8704F8A20F801E5 /* MenuBarRenderer.swift in Sources */,
 				44DF5B7969C7FD7FD4B70C55 /* MenuBarViews.swift in Sources */,
 				52CE7168C60D6CDB60B072BF /* MetricCells.swift in Sources */,
@@ -485,6 +493,8 @@
 				626ED1D8BC6910C3FF1E13F3 /* GroupAggregator.swift in Sources */,
 				D9DA6EA3E343ECC3A4318D68 /* GroupModels.swift in Sources */,
 				150C2540E365C0B47794DE6A /* LiveSystemTests.swift in Sources */,
+				5F719AED00DDE6471B002D2D /* LoginItem.swift in Sources */,
+				906F136882922715F25D51F0 /* LoginItemTests.swift in Sources */,
 				5F17934FE763A0366EFC2597 /* MenuBarRenderer.swift in Sources */,
 				8C66D4E438C2635EAC69B60F /* MenuBarRendererTests.swift in Sources */,
 				771878C5B5D004804474A021 /* MenuBarViews.swift in Sources */,
@@ -603,7 +613,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_TESTABILITY = YES;
@@ -617,7 +627,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.2.0;
+				MARKETING_VERSION = 1.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.cameronowens.Gauge;
 				PRODUCT_NAME = Gauge;
 				SDKROOT = macosx;
@@ -629,7 +639,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_TESTABILITY = YES;
@@ -643,7 +653,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.2.0;
+				MARKETING_VERSION = 1.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.cameronowens.Gauge;
 				PRODUCT_NAME = Gauge;
 				SDKROOT = macosx;

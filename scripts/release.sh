@@ -33,8 +33,9 @@ APP="build/Build/Products/Release/Gauge.app"
 
 echo "▸ Running tests…"
 TEST_OUT=$(scripts/test.sh 2>&1) || true
-echo "$TEST_OUT" | grep -E "Executed [0-9]+ tests" | tail -1
-echo "$TEST_OUT" | grep -qE "Executed [0-9]+ tests, with 0 failures" || { echo "Tests failed – aborting release"; exit 1; }
+SUMMARY=$(echo "$TEST_OUT" | grep -E "Executed [0-9]+ tests" | tail -1)   # the final line is the overall total
+echo "$SUMMARY"
+echo "$SUMMARY" | grep -qE "with 0 failures" || { echo "Tests failed – aborting release"; echo "$TEST_OUT" | grep -E "error:" | head; exit 1; }
 
 echo "▸ Packaging DMG…"
 mkdir -p dist; STAGE=$(mktemp -d)

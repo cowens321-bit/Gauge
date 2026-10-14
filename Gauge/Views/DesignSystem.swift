@@ -67,7 +67,7 @@ struct AmbientBackground: View {
         let calmA = Color.blue, calmB = Color.teal, calmC = Color.indigo
         let hot = Color.orange
         let a = calmA.mix(with: hot, by: h * 0.9), b = calmB.mix(with: .red, by: h * 0.7), c = calmC.mix(with: hot, by: h * 0.6)
-        let o = scheme == .dark ? 0.42 : 0.26
+        let o = scheme == .dark ? 0.62 : 0.42
         MeshGradient(width: 3, height: 3,
                      points: [[0, 0], [0.5, 0], [1, 0], [0, 0.5], [0.55, 0.45], [1, 0.5], [0, 1], [0.5, 1], [1, 1]],
                      colors: [a.opacity(o), c.opacity(o * 0.7), b.opacity(o),
@@ -163,10 +163,8 @@ struct GlassCardModifier: ViewModifier {
             }
         } else {
             let glass: Glass = tint.map { Glass.regular.tint($0.opacity(0.16)) } ?? Glass.regular
-            // The glass plate is its own layer behind the content.
-            content.padding(padding).background {
-                Color.clear.glassEffect(interactive ? glass.interactive() : glass, in: .rect(cornerRadius: radius))
-            }
+            // Standard Liquid Glass usage: the effect is applied to the content itself.
+            content.padding(padding).glassEffect(interactive ? glass.interactive() : glass, in: .rect(cornerRadius: radius))
         }
     }
 }

@@ -47,10 +47,12 @@
 		8222226CA8704F8A20F801E5 /* MenuBarRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDDD44FD3558FEB027202149 /* MenuBarRenderer.swift */; };
 		85ED9EF92A18A31F9E6A62A0 /* ProcessSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854F49652316DF10E454030A /* ProcessSource.swift */; };
 		87E7B82397E78EC23BA1034E /* AggregationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165C138A5E7CF18D5DB5BB4A /* AggregationTests.swift */; };
+		8B594BD22A936CA76EDD2E8D /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DB07B3789E27D0B0780D61 /* Notifications.swift */; };
 		8C66D4E438C2635EAC69B60F /* MenuBarRendererTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0277356F7148CFA394933D16 /* MenuBarRendererTests.swift */; };
 		8EA4055D173BADE1F6A54A64 /* ProcessController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6544028F71A10B370FD5C076 /* ProcessController.swift */; };
 		9344E1205BE492E4BD28059F /* Formatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82941CDA58ED4A9C93DAD2B0 /* Formatters.swift */; };
 		9366E2120FAC00D4EAFF05E0 /* ProcessController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6544028F71A10B370FD5C076 /* ProcessController.swift */; };
+		9677BFCC226C4FA647586828 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DB07B3789E27D0B0780D61 /* Notifications.swift */; };
 		9F7E7FBFC300A02AADE89A1D /* GroupAggregator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B068FF2F66CFFF2224957A /* GroupAggregator.swift */; };
 		9FA2AD48B135B7369A84EA76 /* TestSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C58CCC2C032930F6A596A16 /* TestSupport.swift */; };
 		A55C14B2DDA31A9F2C2C45D6 /* RateTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B057E55DBDBC192AE71B700 /* RateTrackerTests.swift */; };
@@ -72,6 +74,7 @@
 		EA196803AABEB049542243D0 /* AppList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505E7F98979A33FAFC184EBF /* AppList.swift */; };
 		ED545B9E5638830DC7C6F379 /* AppInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF5A9B539D4CB3E4278A88A7 /* AppInspector.swift */; };
 		F27A01A466B5CE587A6DCB50 /* OverviewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E3AD59B5AAB820D19F5155C /* OverviewHeader.swift */; };
+		F4F8D95FE5B56D6A38C819A5 /* DefaultsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 934F843328D8C05AC370FA37 /* DefaultsTests.swift */; };
 		F8D9850CDB95F6F239D4F3CC /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F4058541586621F6372544 /* DesignSystem.swift */; };
 		FD0A9B160939C3FA00C3C4CF /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = D15740EA3B24DCBB2E90DD99 /* Preferences.swift */; };
 		FFCC3621CBCF627A12B1F3E5 /* SystemModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0C95AD1926EC44737EB19D8 /* SystemModels.swift */; };
@@ -102,6 +105,7 @@
 		2C58CCC2C032930F6A596A16 /* TestSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSupport.swift; sourceTree = "<group>"; };
 		2DB5197771E5A25D71169664 /* TimeSeries.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSeries.swift; sourceTree = "<group>"; };
 		332819ECA3499C909F1B88B2 /* Sampler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sampler.swift; sourceTree = "<group>"; };
+		33DB07B3789E27D0B0780D61 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		3D0E2561DF286E43876DE994 /* ApplicationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationsView.swift; sourceTree = "<group>"; };
 		495DA08633366CB50B3E0EE7 /* GaugeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GaugeApp.swift; sourceTree = "<group>"; };
 		505E7F98979A33FAFC184EBF /* AppList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppList.swift; sourceTree = "<group>"; };
@@ -117,6 +121,7 @@
 		854F49652316DF10E454030A /* ProcessSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessSource.swift; sourceTree = "<group>"; };
 		8B057E55DBDBC192AE71B700 /* RateTrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RateTrackerTests.swift; sourceTree = "<group>"; };
 		90F4058541586621F6372544 /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
+		934F843328D8C05AC370FA37 /* DefaultsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultsTests.swift; sourceTree = "<group>"; };
 		95A09F8CD02321699F83F025 /* GroupModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupModels.swift; sourceTree = "<group>"; };
 		96D275F4CAA370F36EBC08D9 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		B064A0FDD85728044FD0F429 /* RateTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RateTracker.swift; sourceTree = "<group>"; };
@@ -153,6 +158,7 @@
 			children = (
 				165C138A5E7CF18D5DB5BB4A /* AggregationTests.swift */,
 				C6FDC9AEC913AC77A698BAE2 /* AttributionTests.swift */,
+				934F843328D8C05AC370FA37 /* DefaultsTests.swift */,
 				BFE82FF40EAD9AB8757E5B2D /* LiveSystemTests.swift */,
 				0277356F7148CFA394933D16 /* MenuBarRendererTests.swift */,
 				B251EFD2E7F007240FCF0295 /* ProtectionTests.swift */,
@@ -232,6 +238,7 @@
 			children = (
 				CEFA6439B64CD4E1DBB59FB3 /* AppFilter.swift */,
 				82941CDA58ED4A9C93DAD2B0 /* Formatters.swift */,
+				33DB07B3789E27D0B0780D61 /* Notifications.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -442,6 +449,7 @@
 				52CE7168C60D6CDB60B072BF /* MetricCells.swift in Sources */,
 				62D0A3B407FA98BF20DDCFA8 /* MonitorModel.swift in Sources */,
 				7DDFD1FA5D3346BE7BEA63CF /* NettopNetworkSource.swift in Sources */,
+				8B594BD22A936CA76EDD2E8D /* Notifications.swift in Sources */,
 				C338DDF5D54E75E5B0A6FA45 /* OverviewHeader.swift in Sources */,
 				FD0A9B160939C3FA00C3C4CF /* Preferences.swift in Sources */,
 				9366E2120FAC00D4EAFF05E0 /* ProcessController.swift in Sources */,
@@ -471,6 +479,7 @@
 				76CBF930420D14BC17E65406 /* ApplicationsView.swift in Sources */,
 				62E5A6109B6F0622C024E6F9 /* AttributionEngine.swift in Sources */,
 				AEB05E5FD41C489E09137800 /* AttributionTests.swift in Sources */,
+				F4F8D95FE5B56D6A38C819A5 /* DefaultsTests.swift in Sources */,
 				2B96F1C3C782B44F1627C1B3 /* DesignSystem.swift in Sources */,
 				748441B16F5ABDF85DBF2EB3 /* Formatters.swift in Sources */,
 				626ED1D8BC6910C3FF1E13F3 /* GroupAggregator.swift in Sources */,
@@ -482,6 +491,7 @@
 				5C78C8C84493AAF59B99A5B5 /* MetricCells.swift in Sources */,
 				266B5F78C45E6AB04C61B3C3 /* MonitorModel.swift in Sources */,
 				CA8E2E0E64FEAFF0DAD1823B /* NettopNetworkSource.swift in Sources */,
+				9677BFCC226C4FA647586828 /* Notifications.swift in Sources */,
 				F27A01A466B5CE587A6DCB50 /* OverviewHeader.swift in Sources */,
 				A81476A088E0CF48DBAEF222 /* Preferences.swift in Sources */,
 				8EA4055D173BADE1F6A54A64 /* ProcessController.swift in Sources */,
@@ -593,7 +603,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_TESTABILITY = YES;
@@ -607,7 +617,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.cameronowens.Gauge;
 				PRODUCT_NAME = Gauge;
 				SDKROOT = macosx;
@@ -619,7 +629,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_TESTABILITY = YES;
@@ -633,7 +643,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.cameronowens.Gauge;
 				PRODUCT_NAME = Gauge;
 				SDKROOT = macosx;

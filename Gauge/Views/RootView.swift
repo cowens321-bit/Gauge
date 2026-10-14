@@ -9,8 +9,7 @@ enum SidebarItem: String, CaseIterable, Identifiable {
 
 struct RootView: View {
     @Environment(MonitorModel.self) private var model
-    @AppStorage(Pref.refreshInterval) private var refresh = 2.0
-    @AppStorage(Pref.startMinimized) private var startMinimized = false
+    @AppStorage(Pref.refreshInterval) private var refresh = 10.0
     @State private var selection: SidebarItem? =
         SidebarItem(rawValue: UserDefaults.standard.string(forKey: "launchPage") ?? "") ?? .applications
 
@@ -28,8 +27,9 @@ struct RootView: View {
                 case .system: SystemView()
                 }
             }
-            .background { AmbientBackground(heat: model.heat) }
         }
+        // Behind everything, including the sidebar and toolbar, so the system glass has something to refract.
+        .containerBackground(for: .window) { AmbientBackground(heat: model.heat) }
         .navigationTitle("Gauge")
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
@@ -52,7 +52,6 @@ struct RootView: View {
                 f.origin.y = min(max(f.origin.y, v.minY), v.maxY - f.height)
                 if f != w.frame { w.setFrame(f, display: true) }
             }
-            if startMinimized { w.miniaturize(nil) }
         }))
         .onAppear { model.reevaluate() }
         .frame(minWidth: 620, minHeight: 480)

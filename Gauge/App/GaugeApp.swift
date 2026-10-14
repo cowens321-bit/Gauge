@@ -2,13 +2,33 @@ import SwiftUI
 import AppKit
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
-    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
-        !UserDefaults.standard.bool(forKey: Pref.showMenuBar)
+    private var defaultsObserver: NSObjectProtocol?
+
+    /// Gauge is a menu bar utility: no Dock icon unless the user asks for one (or has hidden the menu bar item,
+    /// in which case the Dock icon is the only way back in).
+    @MainActor static func applyActivationPolicy() {
+        let d = UserDefaults.standard
+        let wantsDock = d.bool(forKey: Pref.showInDock) || !d.bool(forKey: Pref.showMenuBar)
+        let policy: NSApplication.ActivationPolicy = wantsDock ? .regular : .accessory
+        if NSApp.activationPolicy() != policy { NSApp.setActivationPolicy(policy) }
+    }
+
+    func applicationWillFinishLaunching(_ notification: Notification) {
+        MainActor.assumeIsolated { Self.applyActivationPolicy() }
     }
     func applicationDidFinishLaunching(_ notification: Notification) {
         // Hop to the next run-loop turn so nothing runs inside launch-time AppKit initialisation.
         Task { @MainActor in MonitorModel.shared.start() }
+        defaultsObserver = NotificationCenter.default.addObserver(forName: UserDefaults.didChangeNotification, object: nil, queue: .main) { _ in
+            Task { @MainActor in AppDelegate.applyActivationPolicy() }
+        }
     }
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        // Re-launching the app (Finder, Spotlight, Dock) brings up the main window.
+        if !flag { NotificationCenter.default.post(name: .gaugeOpenMainWindow, object: nil) }
+        return true
+    }
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { false }
     func applicationWillTerminate(_ notification: Notification) {
         MainActor.assumeIsolated { MonitorModel.shared.shutdown() }
     }
@@ -31,6 +51,9 @@ struct GaugeApp: App {
             RootView().environment(model).injectPreferences()
         }
         .defaultSize(width: 1240, height: 780)
+        // Menu bar first: the full window is opened from the popover. If the menu bar item is hidden the
+        // window is shown at launch so the app is never unreachable.
+        .defaultLaunchBehavior(UserDefaults.standard.bool(forKey: Pref.showMenuBar) ? .suppressed : .presented)
         .windowToolbarStyle(.unified)
         .commands {
             CommandGroup(after: .appInfo) {

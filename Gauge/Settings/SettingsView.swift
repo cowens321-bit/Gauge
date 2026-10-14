@@ -8,9 +8,10 @@ struct SettingsView: View {
     @AppStorage(Pref.menuBarGPU) private var mbGPU = false
     @AppStorage(Pref.menuBarDisk) private var mbDisk = false
     @AppStorage(Pref.menuBarStorage) private var mbStorage = false
-    @AppStorage(Pref.menuBarStyle) private var mbStyle = MenuBarStyle.both
-    @AppStorage(Pref.refreshInterval) private var refresh = 2.0
-    @AppStorage(Pref.startMinimized) private var startMinimized = false
+    @AppStorage(Pref.menuBarStyle) private var mbStyle = MenuBarStyle.value
+    @AppStorage(Pref.refreshInterval) private var refresh = 10.0
+    @AppStorage(Pref.showInDock) private var showInDock = false
+    @Environment(\.accessibilityReduceTransparency) private var systemReduceTransparency
     @AppStorage(Pref.showMenuBar) private var showMenuBar = false
     @AppStorage(Pref.menuBarCPU) private var mbCPU = true
     @AppStorage(Pref.menuBarMemory) private var mbMem = true
@@ -39,7 +40,8 @@ struct SettingsView: View {
                 Section("Startup") {
                     Toggle("Launch at login", isOn: Binding(get: { loginEnabled }, set: setLogin))
                     if let loginError { Text(loginError).font(.caption).foregroundStyle(.red) }
-                    Toggle("Start minimised", isOn: $startMinimized)
+                    Toggle("Show Gauge in the Dock", isOn: $showInDock)
+                    Text("Off by default: Gauge lives in the menu bar. Click its icon, then “Open Gauge” for the full window.").font(.caption).foregroundStyle(.secondary)
                 }
                 Section("Monitoring") {
                     Toggle("Per-app network activity (uses nettop)", isOn: $perAppNetwork)
@@ -51,6 +53,10 @@ struct SettingsView: View {
 
             Form {
                 Picker("Appearance", selection: $appearance) { ForEach(AppearanceMode.allCases) { Text($0.title).tag($0) } }
+                if systemReduceTransparency {
+                    Label("macOS “Reduce transparency” is on, so Liquid Glass is switched off system-wide. Turn it off in System Settings ▸ Accessibility ▸ Display to see it.", systemImage: "exclamationmark.triangle")
+                        .font(.caption).foregroundStyle(.orange)
+                }
                 Picker("Visual effects", selection: $effects) { ForEach(VisualEffects.allCases) { Text($0.title).tag($0) } }
                 Text("Liquid Glass is GPU-composited and re-rendered whenever live numbers behind it change. Reduced uses standard materials and no animated background; it is also used automatically when macOS “Reduce transparency” is on.").font(.caption).foregroundStyle(.secondary)
                 Picker("Default sort", selection: $sort) { ForEach(SortKey.allCases) { Text($0.title).tag($0) } }

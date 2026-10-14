@@ -4,7 +4,6 @@ import AppKit
 enum Pref {
     static let refreshInterval = "refreshInterval"          // seconds; 0 == paused
     static let launchAtLogin = "launchAtLogin"
-    static let startMinimized = "startMinimized"
     static let showMenuBar = "showMenuBar"
     static let menuBarCPU = "menuBarCPU"
     static let menuBarMemory = "menuBarMemory"
@@ -22,12 +21,13 @@ enum Pref {
     static let perAppNetwork = "perAppNetwork"
     static let listScope = "listScope"
     static let visualEffects = "visualEffects"
+    static let showInDock = "showInDock"
 
     static func registerDefaults() {
         UserDefaults.standard.register(defaults: [
-            refreshInterval: 2.0, launchAtLogin: false, startMinimized: false, showMenuBar: true,
+            refreshInterval: 10.0, launchAtLogin: false, showMenuBar: true,
             menuBarCPU: true, menuBarMemory: true, menuBarNetwork: false, menuBarGraph: true,
-            menuBarGPU: false, menuBarDisk: false, menuBarStorage: false, menuBarStyle: MenuBarStyle.both.rawValue,
+            menuBarGPU: false, menuBarDisk: false, menuBarStorage: false, menuBarStyle: MenuBarStyle.value.rawValue, showInDock: false,
             appearance: AppearanceMode.system.rawValue, defaultSort: SortKey.cpu.rawValue,
             displayUnits: ByteUnits.binary.rawValue, historyMinutes: 10,
             cpuNormalization: CPUNormalization.perCore.rawValue, perAppNetwork: false,

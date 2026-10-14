@@ -5,6 +5,9 @@ Groups every process under the application responsible for it and shows honest, 
 energy, disk and (opt‑in) network. No accounts, analytics, network access or disk writes of its own.
 Inspired by the publicly described feature set of Vitals; no Vitals code or assets are used.
 
+## Defaults
+Menu bar item on and **no Dock icon** (Gauge is a menu bar utility; open the full window from the menu bar popover ▸ *Open Gauge*, or by launching the app again). Menu bar shows **values** only (CPU + Memory) and Gauge samples **every 10 seconds**. All of this is changeable in Settings (Show Gauge in the Dock, Refresh interval, Menu Bar ▸ Display).
+
 ## Install & updates
 Download `Gauge-<version>.dmg` from the [latest release](https://github.com/cowens321-bit/Gauge/releases/latest), drag **Gauge** to **Applications**, and launch it. After that, Gauge keeps itself current: it checks this repository's `appcast.xml` daily (Settings ▸ Updates, or **Gauge ▸ Check for Updates…**), verifies each new DMG with an EdDSA signature (Sparkle), and installs it for you — no more manual DMG downloads.
 

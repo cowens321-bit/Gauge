@@ -5,11 +5,17 @@ import AppKit
 /// template image so it matches the system menu bar in light, dark and tinted modes.
 struct MenuBarLabel: View {
     @Environment(MonitorModel.self) private var model
+    @Environment(\.openWindow) private var openWindow
     var body: some View {
-        if model.menuBarImage.size.width > 1 {
-            Image(nsImage: model.menuBarImage)
-        } else {
-            Image(systemName: "gauge.with.needle")
+        Group {
+            if model.menuBarImage.size.width > 1 {
+                Image(nsImage: model.menuBarImage)
+            } else {
+                Image(systemName: "gauge.with.needle")
+            }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .gaugeOpenMainWindow)) { _ in
+            openWindow(id: "main"); NSApp.activate(ignoringOtherApps: true)
         }
     }
 }

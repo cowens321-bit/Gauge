@@ -86,6 +86,7 @@ struct AppList: View {
                 }
                 .scrollEdgeEffectStyle(.soft, for: .top)
                 .focusable()
+                .focusEffectDisabled()
                 .onKeyPress(.downArrow) { move(1); return .handled }
                 .onKeyPress(.upArrow) { move(-1); return .handled }
                 .onKeyPress(.return) { if let s = selection { onOpen(s) }; return .handled }
@@ -127,6 +128,7 @@ struct AppList: View {
                 .frame(width: col.width, alignment: .leading)
                 .frame(maxWidth: col.width == nil ? .infinity : nil)
                 .padding(.leading, col == .name ? 52 : 0)
+                .padding(.trailing, (col == .name || col == .processes) ? 0 : 14)
             }
         }
         .padding(.horizontal, 16).padding(.vertical, 10)

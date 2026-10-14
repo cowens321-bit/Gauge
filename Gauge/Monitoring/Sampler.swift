@@ -11,7 +11,7 @@ actor Sampler {
     private let source: ProcessSource
     private let system: SystemMetricsProvider
     private var tracker = RateTracker()
-    private var bundleCache: [String: AppBundleInfo] = [:]
+    private let caches = AttributionCaches()
     private var responsibleCache: [ProcessIdentity: Int32] = [:]
 
     init(source: ProcessSource = LibprocSource(), system: SystemMetricsProvider = MachSystemMetrics()) {
@@ -42,7 +42,10 @@ actor Sampler {
             }
             if responsibleCache.count > live.count + 128 { responsibleCache = responsibleCache.filter { live.contains($0.key) } }
 
-            let engine = AttributionEngine(bundleInfo: { [self] path in self.bundleInfoSync(path) })
+            let caches = self.caches
+            caches.prepare(regular: ctx.regularAppPaths)
+            let engine = AttributionEngine(bundleInfo: { caches.info($0) },
+                                           owningBundleOf: { caches.owner(of: $0) })
             let attributions = engine.attribute(records, context: AttributionContext(regularAppPaths: ctx.regularAppPaths, responsible: responsible))
             let net = ctx.network.map { $0.currentRates() }
             groups = GroupAggregator.build(records: records, attributions: attributions, rates: rates,
@@ -55,11 +58,6 @@ actor Sampler {
                         hasProcessData: ctx.includeProcesses, hasNetworkData: ctx.network != nil && ctx.includeProcesses)
     }
 
-    // Actor-isolated cache accessed from the synchronous engine closure (which runs inside `sample`).
-    private nonisolated func bundleInfoSync(_ path: String) -> AppBundleInfo? {
-        Sampler.readBundle(path)
-    }
-
     static func readBundle(_ path: String) -> AppBundleInfo? {
         let infoPlist = path + "/Contents/Info.plist"
         guard let d = NSDictionary(contentsOfFile: infoPlist) else { return nil }
@@ -67,5 +65,31 @@ actor Sampler {
         let name = [d["CFBundleDisplayName"] as? String, d["CFBundleName"] as? String]
             .compactMap { $0?.trimmingCharacters(in: .whitespaces) }.first { !$0.isEmpty } ?? fileName
         return AppBundleInfo(path: path, name: name, bundleID: d["CFBundleIdentifier"] as? String)
+    }
+}
+
+/// Per-path results that only change when apps launch/quit: owning bundle of an executable path and the
+/// bundle's Info.plist name/identifier. Kept across ticks (only touched from inside the Sampler actor).
+final class AttributionCaches: @unchecked Sendable {
+    private var owners: [String: String?] = [:]
+    private var infos: [String: AppBundleInfo?] = [:]
+    private var regular: Set<String> = []
+
+    func prepare(regular newRegular: Set<String>) {
+        if newRegular != regular { regular = newRegular; owners.removeAll(keepingCapacity: true) }
+        if owners.count > 20_000 { owners.removeAll() }   // bound memory on pathological systems
+        if infos.count > 2_000 { infos.removeAll() }
+    }
+    func owner(of path: String) -> String? {
+        if let hit = owners[path] { return hit }
+        let o = AttributionEngine.owningBundle(forPath: path, regular: regular)
+        owners[path] = o
+        return o
+    }
+    func info(_ bundlePath: String) -> AppBundleInfo? {
+        if let hit = infos[bundlePath] { return hit }
+        let i = Sampler.readBundle(bundlePath)
+        infos[bundlePath] = i
+        return i
     }
 }

@@ -9,7 +9,7 @@ struct SettingsView: View {
     @AppStorage(Pref.menuBarDisk) private var mbDisk = false
     @AppStorage(Pref.menuBarStorage) private var mbStorage = false
     @AppStorage(Pref.menuBarStyle) private var mbStyle = MenuBarStyle.value
-    @AppStorage(Pref.refreshInterval) private var refresh = 10.0
+    @AppStorage(Pref.refreshInterval) private var refresh = 2.0
     @AppStorage(Pref.showInDock) private var showInDock = false
     @Environment(\.accessibilityReduceTransparency) private var systemReduceTransparency
     @AppStorage(Pref.showMenuBar) private var showMenuBar = false

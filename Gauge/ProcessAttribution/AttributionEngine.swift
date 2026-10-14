@@ -14,6 +14,8 @@ struct AttributionContext: Sendable {
 ///  4. otherwise it is reported as unattributed (never guessed from the executable name)
 struct AttributionEngine {
     var bundleInfo: (String) -> AppBundleInfo?
+    /// Optional memoised replacement for `owningBundle(forPath:regular:)` (the sampler caches it across ticks).
+    var owningBundleOf: ((String) -> String?)? = nil
 
     static func appBundleCandidates(in path: String) -> [String] {
         // Simulator runtimes embed hundreds of unrelated .app bundles; attribute those via the
@@ -61,7 +63,7 @@ struct AttributionEngine {
             Attribution(key: GroupKey(value: bundlePath), kind: .application, reason: reason, bundle: info(bundlePath))
         }
         func bundle(of rec: ProcessRecord) -> String? {
-            rec.path.flatMap { Self.owningBundle(forPath: $0, regular: context.regularAppPaths) }
+            rec.path.flatMap { p in owningBundleOf.map { $0(p) } ?? Self.owningBundle(forPath: p, regular: context.regularAppPaths) }
         }
 
         var out: [ProcessIdentity: Attribution] = [:]

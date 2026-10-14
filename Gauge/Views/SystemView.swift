@@ -131,7 +131,6 @@ struct MemoryComposition: View {
                     }
                     Spacer(minLength: 0)
                 }
-                .animation(.smooth(duration: 0.8), value: memory.usedBytes)
             }
             .frame(height: 16)
             .clipShape(.capsule)

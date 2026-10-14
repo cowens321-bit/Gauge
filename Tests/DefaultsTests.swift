@@ -10,7 +10,7 @@ final class DefaultsTests: XCTestCase {
         keys.forEach { d.removeObject(forKey: $0) }
         defer { saved.forEach { k, v in if let v { d.set(v, forKey: k) } else { d.removeObject(forKey: k) } } }
         Pref.registerDefaults()
-        XCTAssertEqual(d.double(forKey: Pref.refreshInterval), 10, "scans every 10 seconds")
+        XCTAssertEqual(d.double(forKey: Pref.refreshInterval), 2, "scans every 2 seconds")
         XCTAssertTrue(d.bool(forKey: Pref.showMenuBar), "menu bar item on by default")
         XCTAssertFalse(d.bool(forKey: Pref.showInDock), "hidden from the Dock by default")
         XCTAssertEqual(d.string(forKey: Pref.menuBarStyle), MenuBarStyle.value.rawValue, "menu bar display = values")

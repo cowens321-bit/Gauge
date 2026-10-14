@@ -47,7 +47,6 @@ struct RingGauge: View {
                 .stroke(color.gradient, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
                 .rotationEffect(.degrees(-90))
         }
-        .animation(.smooth(duration: 0.3), value: v)
     }
 }
 
@@ -74,7 +73,6 @@ struct AmbientBackground: View {
                               c.opacity(o * 0.5), a.opacity(o * 0.35), c.opacity(o * 0.5),
                               b.opacity(o * 0.8), a.opacity(o * 0.6), c.opacity(o)])
             .background(Color(nsColor: .windowBackgroundColor))
-            .animation(.easeInOut(duration: 1.6), value: h)
             .ignoresSafeArea()
     }
 }

@@ -25,7 +25,7 @@ enum Pref {
 
     static func registerDefaults() {
         UserDefaults.standard.register(defaults: [
-            refreshInterval: 10.0, launchAtLogin: false, showMenuBar: true,
+            refreshInterval: 2.0, launchAtLogin: false, showMenuBar: true,
             menuBarCPU: true, menuBarMemory: true, menuBarNetwork: false, menuBarGraph: true,
             menuBarGPU: false, menuBarDisk: false, menuBarStorage: false, menuBarStyle: MenuBarStyle.value.rawValue, showInDock: false,
             appearance: AppearanceMode.system.rawValue, defaultSort: SortKey.cpu.rawValue,

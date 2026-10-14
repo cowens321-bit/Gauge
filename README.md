@@ -6,7 +6,7 @@ energy, disk and (opt‑in) network. No accounts, analytics, network access or d
 Inspired by the publicly described feature set of Vitals; no Vitals code or assets are used.
 
 ## Defaults
-Menu bar item on and **no Dock icon** (Gauge is a menu bar utility; open the full window from the menu bar popover ▸ *Open Gauge*, or by launching the app again). Menu bar shows **values** only (CPU + Memory) and Gauge samples **every 10 seconds**. All of this is changeable in Settings (Show Gauge in the Dock, Refresh interval, Menu Bar ▸ Display).
+Menu bar item on and **no Dock icon** (Gauge is a menu bar utility; open the full window from the menu bar popover ▸ *Open Gauge*, or by launching the app again). Menu bar shows **values** only (CPU + Memory) and Gauge samples **every 2 seconds**. All of this is changeable in Settings (Show Gauge in the Dock, Refresh interval, Menu Bar ▸ Display).
 
 ## Install & updates
 Download `Gauge-<version>.dmg` from the [latest release](https://github.com/cowens321-bit/Gauge/releases/latest), drag **Gauge** to **Applications**, and launch it. After that, Gauge keeps itself current: it checks this repository's `appcast.xml` daily (Settings ▸ Updates, or **Gauge ▸ Check for Updates…**), verifies each new DMG with an EdDSA signature (Sparkle), and installs it for you — no more manual DMG downloads.
@@ -87,11 +87,7 @@ Quit is graceful (`NSRunningApplication.terminate`) and confirmed; Force Quit re
 Protected targets are refused: pid ≤ 1, Gauge itself, other users' processes, `/System/Library`, `/usr/libexec`, `/usr/sbin`, `/sbin`, Finder/Dock/loginwindow/WindowServer/SystemUIServer/Control Center/Notification Center, and all pseudo groups (manage individual processes in the inspector).
 
 ## Known limitations / honest notes
-* **Gauge’s own CPU use is too high while its window is visible (open issue).** Sampling is cheap (≈20–35 ms per tick for ~900 processes) and costs nothing when the window is hidden and the menu bar item is off. With the window visible, however, I measured roughly 30–55 % of one core on the test Mac (macOS 27 beta, Release build, 2 s refresh). What I established, with the display awake:
-  * Switching *Visual effects* to **Reduced** (no Liquid Glass on live panels, no animated background) made **no meaningful difference** (≈10.0 vs ≈10.5 CPU‑seconds per 20 s), so glass is not the cause.
-  * Removing the overview cards and the app list individually, or both, did **not** remove the load; a stripped window (sidebar, toolbar, search, inspector only) still used ≈27 % at 1 s, 2 s, 10 s and *paused* refresh. That points at something in the window chrome rendering continuously rather than at per‑tick data updates.
-  * A bisect of the remaining chrome (sidebar status pill, search field, inspector) was started but the Mac’s display went to sleep mid‑run, so those four readings are invalid and are not reported.
-  Next step: profile on your hardware (Instruments ▸ Time Profiler / Animation Hitches), then bisect `status`, `.searchable`, `.inspector`, and the toolbar `Menu` in `Views/RootView.swift` / `Views/ApplicationsView.swift`.
+* **Gauge’s own CPU use (measured, Release build, M1 Max, ~1,950 processes, 2 s refresh):** window open with full Liquid Glass ≈ 3 % of one core; menu bar only ≈ 1 %. Two fixes got it there from ≈ 50 %: (1) data ticks no longer animate (each animation frame re-rendered the glass, turning one update into ~40 expensive frames); (2) the sampler caches per-path attribution and Info.plist lookups across ticks (≈ 75–110 ms → ≈ 17 ms per sample).
 * The menu bar popover, Settings window and Quit/Force‑Quit alerts were built and unit‑tested where possible but not clicked through (GUI automation was not permitted on the test Mac).
 * Per‑app GPU, temperature and fan speed are intentionally absent (no supported API). Per‑app network is opt‑in via `nettop`.
 * Single private symbol: `responsibility_get_pid_responsible_for_pid` (dlsym, optional).

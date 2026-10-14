@@ -105,7 +105,10 @@ final class MonitorModel {
         while !Task.isCancelled {
             let snap = await sampler.sample(context(procs: procs, net: net))
             if Task.isCancelled { return }
-            withAnimation(.smooth(duration: 0.35)) { apply(snap) }
+            // No animation on data ticks: every animation frame re-renders the Liquid Glass surfaces, which
+            // turned one update into ~40 expensive frames (~1 CPU-second per tick). Values snap in one frame.
+            var t = Transaction(); t.disablesAnimations = true
+            withTransaction(t) { apply(snap) }
             try? await Task.sleep(for: .seconds(interval), tolerance: .milliseconds(150))
         }
     }

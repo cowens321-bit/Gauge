@@ -9,7 +9,7 @@ enum SidebarItem: String, CaseIterable, Identifiable {
 
 struct RootView: View {
     @Environment(MonitorModel.self) private var model
-    @AppStorage(Pref.refreshInterval) private var refresh = 10.0
+    @AppStorage(Pref.refreshInterval) private var refresh = 2.0
     @State private var selection: SidebarItem? =
         SidebarItem(rawValue: UserDefaults.standard.string(forKey: "launchPage") ?? "") ?? .applications
 
@@ -61,7 +61,6 @@ struct RootView: View {
         HStack(spacing: 8) {
             Image(systemName: refresh == 0 ? "pause.circle.fill" : "circle.fill")
                 .font(.system(size: 8)).foregroundStyle(refresh == 0 ? Color.orange : Color.green)
-                .symbolEffect(.pulse, options: .nonRepeating, value: model.snapshot?.date)
             Text(refresh == 0 ? "Paused" : "Live · every \(Int(refresh)) s").font(.caption).foregroundStyle(.secondary)
             Spacer()
         }

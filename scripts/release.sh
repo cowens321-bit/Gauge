@@ -49,7 +49,7 @@ SIG_LINE=$("$TOOLS/sign_update" "$DMG")            # sparkle:edSignature="…" l
 
 echo "▸ Committing and tagging…"
 git add -A
-git commit -q -m "Release $VERSION" -m "Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>" || true
+git commit -q -m "Release $VERSION" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>" || true
 git tag -f "$TAG" >/dev/null
 git push -q origin main
 git push -q -f origin "$TAG"
@@ -79,7 +79,7 @@ cat > appcast.xml <<XML
 </rss>
 XML
 git add appcast.xml
-git commit -q -m "Appcast for $VERSION" -m "Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>"
+git commit -q -m "Appcast for $VERSION" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 git push -q origin main
 echo "✓ Released $VERSION → https://github.com/$REPO/releases/tag/$TAG"
 echo "  DMG: $DMG"

@@ -3,13 +3,13 @@
   <channel>
     <title>Gauge</title>
     <item>
-      <title>Version 1.3.0</title>
-      <pubDate>Wed, 14 Oct 2026 15:17:38 +0000</pubDate>
-      <sparkle:version>5</sparkle:version>
-      <sparkle:shortVersionString>1.3.0</sparkle:shortVersionString>
+      <title>Version 1.4.0</title>
+      <pubDate>Wed, 14 Oct 2026 15:39:37 +0000</pubDate>
+      <sparkle:version>6</sparkle:version>
+      <sparkle:shortVersionString>1.4.0</sparkle:shortVersionString>
       <sparkle:minimumSystemVersion>26.0</sparkle:minimumSystemVersion>
-      <description><![CDATA[Launch at login: on by default (applied once when Gauge runs from Applications). Turn it off from the menu bar popover or Settings > General and it stays off.]]></description>
-      <enclosure url="https://github.com/cowens321-bit/Gauge/releases/download/v1.3.0/Gauge-1.3.0.dmg" type="application/octet-stream" sparkle:edSignature="ZoH5+9r7wTMgyK4LWFXzrz3PXSPMLXDM6WzGICFhGdBmCWOVSvJGA7c08nRUQicnY9KOQzN9u+joTWvBe8LZCw==" length="3021647" />
+      <description><![CDATA[Open Gauge and Settings in the menu bar now reliably bring their window to the front, and the Gauge app menu (Check for Updates, Settings, Quit) appears while a Gauge window is open. New: Check for Updates in the popover, click an app in the popover to inspect it, opt-in alerts for apps using lots of CPU or memory, popover keyboard shortcuts, better VoiceOver labels.]]></description>
+      <enclosure url="https://github.com/cowens321-bit/Gauge/releases/download/v1.4.0/Gauge-1.4.0.dmg" type="application/octet-stream" sparkle:edSignature="G4TL4p18WdOO2xPOKEFcAzgrrncD1Fmy13Ejdpu2weSIQl9F+UiOW1YV8hbeuVyR5M2r/RuY/cpnpTAlghVzBQ==" length="3131853" />
     </item>
   </channel>
 </rss>

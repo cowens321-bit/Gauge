@@ -2,28 +2,26 @@ import SwiftUI
 import AppKit
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
-    private var defaultsObserver: NSObjectProtocol?
-
-    /// Gauge is a menu bar utility: no Dock icon unless the user asks for one (or has hidden the menu bar item,
-    /// in which case the Dock icon is the only way back in).
-    @MainActor static func applyActivationPolicy() {
-        let d = UserDefaults.standard
-        let wantsDock = d.bool(forKey: Pref.showInDock) || !d.bool(forKey: Pref.showMenuBar)
-        let policy: NSApplication.ActivationPolicy = wantsDock ? .regular : .accessory
-        if NSApp.activationPolicy() != policy { NSApp.setActivationPolicy(policy) }
-    }
+    private var observers: [NSObjectProtocol] = []
 
     func applicationWillFinishLaunching(_ notification: Notification) {
-        MainActor.assumeIsolated { Self.applyActivationPolicy() }
+        MainActor.assumeIsolated { AppActivation.update() }
     }
     func applicationDidFinishLaunching(_ notification: Notification) {
         // Hop to the next run-loop turn so nothing runs inside launch-time AppKit initialisation.
         Task { @MainActor in
+            AlertNotifier.shared.activate()
             MonitorModel.shared.start()
             LoginItem.applyDefaultIfNeeded()   // on by default, once; the user can turn it off in Settings or the popover
         }
-        defaultsObserver = NotificationCenter.default.addObserver(forName: UserDefaults.didChangeNotification, object: nil, queue: .main) { _ in
-            Task { @MainActor in AppDelegate.applyActivationPolicy() }
+        // Re-evaluate Dock/app-menu presence whenever windows come and go or the relevant settings change.
+        let nc = NotificationCenter.default
+        for name in [UserDefaults.didChangeNotification, NSWindow.didBecomeKeyNotification, NSWindow.willCloseNotification,
+                     NSWindow.didMiniaturizeNotification, NSWindow.didDeminiaturizeNotification] {
+            observers.append(nc.addObserver(forName: name, object: nil, queue: .main) { _ in
+                // Slightly later, so a closing window is really gone before we decide.
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { MainActor.assumeIsolated { AppActivation.update() } }
+            })
         }
     }
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
@@ -62,16 +60,29 @@ struct GaugeApp: App {
             CommandGroup(after: .appInfo) {
                 Button("Check for Updates…") { updater.checkForUpdates() }.disabled(!updater.canCheck)
             }
+            CommandGroup(after: .windowList) {
+                Button("Gauge Window") { AppActivation.bringToFront(windowMatching: "main") }
+                    .keyboardShortcut("0", modifiers: .command)
+            }
         }
 
         MenuBarExtra(isInserted: $showMenuBar) {
             MenuBarPopover().environment(model).injectPreferences()
+                .environment(\.checkForUpdates, {
+                    AppActivation.bringToFront()      // Sparkle's dialog needs a foreground app to appear on top
+                    updater.checkForUpdates()
+                })
         } label: {
             MenuBarLabel().environment(model)
         }
         .menuBarExtraStyle(.window)
 
-        Settings { SettingsView(updatesTab: AnyView(UpdatesTab(updater: updater))).environment(model) }
+        Settings {
+            SettingsView(updatesTab: AnyView(UpdatesTab(updater: updater)),
+                         requestAlertPermission: { AlertNotifier.requestAuthorization($0) },
+                         checkAlertPermissionDenied: { AlertNotifier.isDenied($0) })
+                .environment(model)
+        }
     }
 }
 

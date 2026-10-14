@@ -11,6 +11,11 @@ struct SettingsView: View {
     @AppStorage(Pref.menuBarStyle) private var mbStyle = MenuBarStyle.value
     @AppStorage(Pref.refreshInterval) private var refresh = 2.0
     @AppStorage(Pref.showInDock) private var showInDock = false
+    @AppStorage(Pref.alertsEnabled) private var alertsEnabled = false
+    @State private var notificationsDenied = false
+    /// Injected by the app target: asks for notification permission, reports whether it was granted.
+    var requestAlertPermission: ((@escaping @MainActor (Bool) -> Void) -> Void)? = nil
+    var checkAlertPermissionDenied: ((@escaping @MainActor (Bool) -> Void) -> Void)? = nil
     @Environment(\.accessibilityReduceTransparency) private var systemReduceTransparency
     @AppStorage(Pref.showMenuBar) private var showMenuBar = false
     @AppStorage(Pref.menuBarCPU) private var mbCPU = true
@@ -42,6 +47,20 @@ struct SettingsView: View {
                     if let loginError { Text(loginError).font(.caption).foregroundStyle(.red) }
                     Toggle("Show Gauge in the Dock", isOn: $showInDock)
                     Text("Off by default: Gauge lives in the menu bar. Click its icon, then “Open Gauge” for the full window.").font(.caption).foregroundStyle(.secondary)
+                }
+                Section("Alerts") {
+                    Toggle("Notify me when an app keeps using a lot of CPU or memory", isOn: Binding(get: { alertsEnabled }, set: { on in
+                        guard on else { alertsEnabled = false; return }
+                        if let ask = requestAlertPermission {
+                            ask { granted in alertsEnabled = granted; notificationsDenied = !granted }
+                        } else { alertsEnabled = true }
+                    }))
+                    Text("An alert appears when an app uses at least 80% of a CPU core, or a quarter of your memory, for 2 minutes (at most once every 30 minutes per app). Click it to inspect the app. While on, Gauge checks apps every 10 seconds in the background.")
+                        .font(.caption).foregroundStyle(.secondary)
+                    if notificationsDenied {
+                        Label("Notifications for Gauge are turned off in System Settings ▸ Notifications.", systemImage: "bell.slash")
+                            .font(.caption).foregroundStyle(.orange)
+                    }
                 }
                 Section("Monitoring") {
                     Toggle("Per-app network activity (uses nettop)", isOn: $perAppNetwork)
@@ -96,7 +115,10 @@ struct SettingsView: View {
         .formStyle(.grouped)
         .frame(width: 540, height: 520)
         .injectPreferences()
-        .onAppear { loginEnabled = LoginItem.isEnabled }
+        .onAppear {
+            loginEnabled = LoginItem.isEnabled
+            checkAlertPermissionDenied? { denied in notificationsDenied = denied && alertsEnabled }
+        }
         .onChange(of: mbCPU) { model.refreshMenuBarImage() }.onChange(of: mbMem) { model.refreshMenuBarImage() }
         .onChange(of: mbGPU) { model.refreshMenuBarImage() }.onChange(of: mbNet) { model.refreshMenuBarImage() }
         .onChange(of: mbDisk) { model.refreshMenuBarImage() }.onChange(of: mbStorage) { model.refreshMenuBarImage() }

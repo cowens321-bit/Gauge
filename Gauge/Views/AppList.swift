@@ -171,6 +171,8 @@ struct AppRow: View, Equatable {
         }
         .contentShape(Rectangle())
         .onHover { hovering = $0 }
+        .accessibilityElement(children: .combine)
+        .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
     }
 
     @ViewBuilder private func cell(_ col: AppColumn) -> some View {

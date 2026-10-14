@@ -23,12 +23,13 @@ enum Pref {
     static let listScope = "listScope"
     static let visualEffects = "visualEffects"
     static let showInDock = "showInDock"
+    static let alertsEnabled = "alertsEnabled"
 
     static func registerDefaults() {
         UserDefaults.standard.register(defaults: [
             refreshInterval: 2.0, launchAtLogin: true, showMenuBar: true,
             menuBarCPU: true, menuBarMemory: true, menuBarNetwork: false, menuBarGraph: true,
-            menuBarGPU: false, menuBarDisk: false, menuBarStorage: false, menuBarStyle: MenuBarStyle.value.rawValue, showInDock: false,
+            menuBarGPU: false, menuBarDisk: false, menuBarStorage: false, menuBarStyle: MenuBarStyle.value.rawValue, showInDock: false, alertsEnabled: false,
             appearance: AppearanceMode.system.rawValue, defaultSort: SortKey.cpu.rawValue,
             displayUnits: ByteUnits.binary.rawValue, historyMinutes: 10,
             cpuNormalization: CPUNormalization.perCore.rawValue, perAppNetwork: false,

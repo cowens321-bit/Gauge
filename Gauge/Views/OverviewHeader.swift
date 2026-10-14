@@ -114,6 +114,8 @@ struct MetricCard<Chart: View>: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .glassCard(tint: tint, radius: 28, padding: 15)
         .help(help)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(title): \(value). \(subtitle)")
     }
 }
 

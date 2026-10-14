@@ -5,6 +5,11 @@ Groups every process under the application responsible for it and shows honest, 
 energy, disk and (opt‑in) network. No accounts, analytics, network access or disk writes of its own.
 Inspired by the publicly described feature set of Vitals; no Vitals code or assets are used.
 
+## Using Gauge
+* **Menu bar** — click the gauge icon for live CPU/memory/network, the top apps by CPU or memory (click one to open it in Gauge), quick menu‑bar item toggles, *Launch at login*, *Check for Updates…*, Settings (⌘,) and Quit (⌘Q). *Open Gauge* (⌘O) opens the full window.
+* **While a Gauge window is open** Gauge behaves like a normal app: Dock icon and the **Gauge** menu at the top left (Check for Updates…, Settings…, ⌘0 for the Gauge window). Close the windows and it goes back to living only in the menu bar.
+* **Alerts (opt‑in)** — Settings ▸ General ▸ Alerts: a notification when an app uses ≥ 80 % of a core or ≥ 25 % of memory for 2 minutes (at most every 30 min per app); click it to inspect that app. While on, apps are checked every 10 s in the background.
+
 ## Defaults
 Menu bar item on and **no Dock icon** (Gauge is a menu bar utility; open the full window from the menu bar popover ▸ *Open Gauge*, or by launching the app again). Menu bar shows **values** only (CPU + Memory) and Gauge samples **every 2 seconds**. **Launch at login is on by default** (applied once, the first time Gauge runs from Applications); turn it off in the menu bar popover or Settings ▸ General and it stays off. All of this is changeable in Settings (Show Gauge in the Dock, Refresh interval, Menu Bar ▸ Display).
 

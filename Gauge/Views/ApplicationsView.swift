@@ -58,11 +58,23 @@ struct ApplicationsView: View {
         .onAppear { sort = SortSpec(column: AppColumn(defaultSort), ascending: defaultSort == .name) }
         .onChange(of: defaultSort) { _, new in sort = SortSpec(column: AppColumn(new), ascending: new == .name) }
         .onChange(of: selection) { _, new in if new != nil { showInspector = true } }
+        .onAppear { consumeRequestedSelection() }
+        .onChange(of: model.requestedSelection) { _, _ in consumeRequestedSelection() }
         .onChange(of: groups.count) { _, _ in
             // Developer convenience: `-launchInspectTop YES` selects the busiest app once data arrives.
             if selection == nil, UserDefaults.standard.bool(forKey: "launchInspectTop"), let first = rows.first { selection = first.id }
         }
         .alert(item: Binding(get: { model.pending }, set: { model.pending = $0 })) { p in alert(for: p) }
+    }
+
+    /// Selection handed over from the menu bar popover. Widens the scope if the app is filtered out.
+    private func consumeRequestedSelection() {
+        guard let id = model.requestedSelection else { return }
+        model.requestedSelection = nil
+        let groups = model.snapshot?.groups ?? []
+        if !AppFilter.apply(groups, scope: scope, query: query).contains(where: { $0.id == id }) { query = ""; scope = .everything }
+        selection = id
+        showInspector = true
     }
 
     // MARK: List

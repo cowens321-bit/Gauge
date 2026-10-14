@@ -53,7 +53,8 @@ struct RootView: View {
                 if f != w.frame { w.setFrame(f, display: true) }
             }
         }))
-        .onAppear { model.reevaluate() }
+        .onAppear { model.reevaluate(); if model.requestedSelection != nil { selection = .applications } }
+        .onChange(of: model.requestedSelection) { _, new in if new != nil { selection = .applications } }
         .frame(minWidth: 620, minHeight: 480)
     }
 

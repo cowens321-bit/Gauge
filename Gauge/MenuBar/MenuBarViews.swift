@@ -15,7 +15,7 @@ struct MenuBarLabel: View {
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: .gaugeOpenMainWindow)) { _ in
-            openWindow(id: "main"); NSApp.activate(ignoringOtherApps: true)
+            openWindow(id: "main"); AppActivation.bringToFront(windowMatching: "main")
         }
     }
 }
@@ -23,6 +23,9 @@ struct MenuBarLabel: View {
 struct MenuBarPopover: View {
     @Environment(MonitorModel.self) private var model
     @Environment(\.openWindow) private var openWindow
+    @Environment(\.openSettings) private var openSettings
+    @Environment(\.checkForUpdates) private var checkForUpdates
+    @State private var hoveredRow: String?
     @Environment(\.byteUnits) private var units
     @Environment(\.cpuNormalization) private var norm
     @AppStorage(Pref.menuBarCPU) private var mbCPU = true
@@ -72,8 +75,16 @@ struct MenuBarPopover: View {
                             Spacer()
                             Text(mode == 0 ? (g.cpuPercent.map { Fmt.percent(Fmt.cpu($0, cores: model.coreCount, norm), decimals: 0) } ?? "—")
                                            : (g.memoryBytes.map { Fmt.bytes($0, units) } ?? "—"))
-                                .monospacedDigit().foregroundStyle(.secondary).contentTransition(.numericText())
-                        }.font(.callout)
+                                .monospacedDigit().foregroundStyle(.secondary)
+                        }
+                        .font(.callout)
+                        .padding(.horizontal, 6).padding(.vertical, 3)
+                        .background(RoundedRectangle(cornerRadius: 8, style: .continuous)
+                            .fill(hoveredRow == g.id ? Color.primary.opacity(0.08) : .clear))
+                        .contentShape(Rectangle())
+                        .onHover { inside in hoveredRow = inside ? g.id : (hoveredRow == g.id ? nil : hoveredRow) }
+                        .onTapGesture { openMain(selecting: g.id) }
+                        .help("Show \(g.name) in Gauge")
                     }
                     if top.isEmpty { ProgressView().controlSize(.small).frame(maxWidth: .infinity) }
                 }
@@ -96,12 +107,22 @@ struct MenuBarPopover: View {
             })) { Label("Launch at login", systemImage: "power.circle").font(.callout) }
                 .toggleStyle(.switch).controlSize(.small)
                 .padding(.horizontal, 4)
-            HStack {
-                Button("Open Gauge", systemImage: "macwindow") { openWindow(id: "main"); NSApp.activate(ignoringOtherApps: true) }
+            HStack(spacing: 8) {
+                Button("Open Gauge", systemImage: "macwindow") { openMain(selecting: nil) }
                     .buttonStyle(.glassProminent)
+                    .keyboardShortcut("o")
                 Spacer()
-                SettingsLink { Image(systemName: "gearshape") }.buttonStyle(.glass)
-                Button { NSApp.terminate(nil) } label: { Image(systemName: "power") }.buttonStyle(.glass)
+                if let checkForUpdates {
+                    Button { checkForUpdates() } label: { Image(systemName: "arrow.triangle.2.circlepath") }
+                        .buttonStyle(.glass).help("Check for Updates…")
+                }
+                Button {
+                    AppActivation.bringToFront(windowMatching: "Settings")
+                    openSettings()
+                } label: { Image(systemName: "gearshape") }
+                    .buttonStyle(.glass).help("Settings…").keyboardShortcut(",")
+                Button { NSApp.terminate(nil) } label: { Image(systemName: "power") }
+                    .buttonStyle(.glass).help("Quit Gauge").keyboardShortcut("q")
             }
         }
         .padding(12)
@@ -114,6 +135,12 @@ struct MenuBarPopover: View {
         .onChange(of: mbNet) { model.refreshMenuBarImage() }
         .onChange(of: mbDisk) { model.refreshMenuBarImage() }
         .onChange(of: mbStorage) { model.refreshMenuBarImage() }
+    }
+
+    private func openMain(selecting id: String?) {
+        model.requestedSelection = id
+        openWindow(id: "main")
+        AppActivation.bringToFront(windowMatching: "main")
     }
 
     private func ring(_ t: String, _ v: Double, _ text: String, _ c: Color) -> some View {

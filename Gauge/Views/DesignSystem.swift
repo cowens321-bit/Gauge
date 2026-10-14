@@ -98,6 +98,8 @@ struct StatTile: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .glassCard(radius: 18, padding: 12)
         .help(help ?? "")
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(title): \(value)")
     }
 }
 

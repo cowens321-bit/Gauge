@@ -32,10 +32,12 @@ xcodebuild -project Gauge.xcodeproj -scheme Gauge -configuration Release -derive
 APP="build/Build/Products/Release/Gauge.app"
 
 echo "▸ Running tests…"
-TEST_OUT=$(scripts/test.sh 2>&1) || true
-SUMMARY=$(echo "$TEST_OUT" | grep -E "Executed [0-9]+ tests" | tail -1)   # the final line is the overall total
-echo "$SUMMARY"
-echo "$SUMMARY" | grep -qE "with 0 failures" || { echo "Tests failed – aborting release"; echo "$TEST_OUT" | grep -E "error:" | head; exit 1; }
+# Gate: the test process must exit 0 AND report the overall suite as passed (a crash mid-run must fail).
+if TEST_OUT=$(scripts/test.sh 2>&1); then TEST_STATUS=0; else TEST_STATUS=$?; fi
+echo "$TEST_OUT" | grep -E "Executed [0-9]+ tests" | tail -1
+if [ "$TEST_STATUS" -ne 0 ] || ! echo "$TEST_OUT" | grep -q "Test Suite 'All tests' passed"; then
+  echo "Tests failed or crashed (exit $TEST_STATUS) – aborting release"; echo "$TEST_OUT" | grep -E "error:|Segmentation|crash" | head; exit 1
+fi
 
 echo "▸ Packaging DMG…"
 mkdir -p dist; STAGE=$(mktemp -d)

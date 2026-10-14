@@ -21,6 +21,8 @@ final class MonitorModel {
     private(set) var interval: Double = 2
     private(set) var isSampling = false
     var pending: PendingAction?
+    /// Set by the menu bar popover when the user picks an app; the main window consumes it.
+    var requestedSelection: String?
     var lastActionMessage: String?
 
     var windowVisible = false { didSet { if oldValue != windowVisible { reevaluate() } } }
@@ -33,6 +35,10 @@ final class MonitorModel {
     @ObservationIgnored private var nettopInterval: Double?
     @ObservationIgnored private var historySeconds: TimeInterval = 600
     @ObservationIgnored private var observer: NSObjectProtocol?
+    @ObservationIgnored private var alertTracker = UsageAlertTracker()
+    @ObservationIgnored private var alertsEnabled = false
+    /// Delivers high-usage alerts (wired to user notifications by the app delegate).
+    @ObservationIgnored var onAlerts: (([UsageAlertTracker.Alert]) -> Void)?
 
     let coreCount = ProcessInfo.processInfo.activeProcessorCount
     let totalMemory = ProcessInfo.processInfo.physicalMemory
@@ -71,19 +77,22 @@ final class MonitorModel {
         refreshMenuBarImage()
 
         let wantsProcs = windowVisible || popoverVisible
-        let wantsAny = interval > 0 && (wantsProcs || menuBar)
+        // High-usage alerts need app data even when nothing is on screen: sample apps every ~10 s then.
+        alertsEnabled = d.bool(forKey: Pref.alertsEnabled)
+        let backgroundProcs = alertsEnabled && !wantsProcs
+        let wantsAny = interval > 0 && (wantsProcs || menuBar || alertsEnabled)
         let useNet = wantsAny && wantsProcs && wantNet
         if useNet {
             if !nettop.isRunning || nettopInterval != interval { nettop.start(interval: interval); nettopInterval = interval }
         } else if nettop.isRunning { nettop.stop(); nettopInterval = nil }
 
         guard wantsAny else { loop?.cancel(); loop = nil; loopSignature = ""; isSampling = false; return }
-        let sig = "\(interval)|\(wantsProcs)|net\(useNet ? 1 : 0)"
+        let sig = "\(interval)|\(wantsProcs)|bg\(backgroundProcs)|net\(useNet ? 1 : 0)"
         if sig == loopSignature, loop != nil { return }
         loopSignature = sig
         loop?.cancel()
         isSampling = true
-        loop = Task { [weak self] in await self?.run(interval: interval, procs: wantsProcs, net: useNet) }
+        loop = Task { [weak self] in await self?.run(interval: interval, procs: wantsProcs, backgroundProcs: backgroundProcs, net: useNet) }
     }
 
     private func context(procs: Bool, net: Bool) -> SamplingContext {
@@ -96,14 +105,18 @@ final class MonitorModel {
         return SamplingContext(regularAppPaths: regular, includeProcesses: procs, network: net ? nettop : nil)
     }
 
-    private func run(interval: Double, procs: Bool, net: Bool) async {
+    private func run(interval: Double, procs: Bool, backgroundProcs: Bool, net: Bool) async {
+        let every = max(1, Int((10 / interval).rounded(.up)))   // background app checks ≈ every 10 s
+        var tick = 0
         if procs {
             await sampler.resetProcessBaseline()
             _ = await sampler.sample(context(procs: true, net: net))
             try? await Task.sleep(for: .milliseconds(600))
         }
         while !Task.isCancelled {
-            let snap = await sampler.sample(context(procs: procs, net: net))
+            let withProcs = procs || (backgroundProcs && tick % every == 0)
+            tick += 1
+            let snap = await sampler.sample(context(procs: withProcs, net: net && procs))
             if Task.isCancelled { return }
             // No animation on data ticks: every animation frame re-renders the Liquid Glass surfaces, which
             // turned one update into ~40 expensive frames (~1 CPU-second per tick). Values snap in one frame.
@@ -132,6 +145,10 @@ final class MonitorModel {
         refreshMenuBarImage()
 
         guard s.hasProcessData else { return }
+        if alertsEnabled {
+            let fired = alertTracker.update(groups: s.groups, totalMemory: totalMemory, now: s.date)
+            if !fired.isEmpty { onAlerts?(fired) }
+        }
         var seen = Set<String>()
         for g in s.groups {
             seen.insert(g.id)
